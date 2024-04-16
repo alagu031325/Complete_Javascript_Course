@@ -1,0 +1,69 @@
+* {
+  /* selects all the elements - global reset */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Element selector */
+body {
+  /* Property name and its value */
+  background-color: rgb(255, 247, 201);
+  /* font properties are inherited by all the child elements */
+  font-family: Arial;
+  font-size: 20px;
+  /* applies to all 4 sides */
+  padding: 50px;
+}
+
+h1 {
+  font-size: 35px;
+  margin-bottom: 25px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  /* centered inside the h2 box - block element - creates new line for new element */
+  text-align: center;
+}
+
+p {
+  margin-bottom: 20px;
+}
+
+.first {
+  /* Text color property */
+  color: red;
+}
+
+#your-name {
+  /* background image and background color not only applies to content area but to the entire fill aread of the box */
+  background-color: rgb(255, 220, 105);
+  /* shorthand property that allows to specify border width, border style, and color - border property is not inherited by child elements */
+  border: 5px solid #444;
+  width: 400px;
+  padding: 25px;
+  margin-top: 30px;
+}
+
+/* inline elements */
+input,
+button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* Inline element only occupies the space needed by its content */
+a {
+  background-color: yellowgreen;
+}
+
+/* If we dont specify then width and height will be same as the src image */
+#course-image {
+  width: 300px;
+}
+
+/* descendant */
+#your-name h2 {
+  color: olivedrab;
+}

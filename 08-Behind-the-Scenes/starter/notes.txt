@@ -1,0 +1,114 @@
+Overview of Javascript:
+-----------------------
+1. Highlevel
+
+2. Garbage-collected
+
+3. Interpreted or JIT Compiled
+
+4. Multi-Paradigm
+
+5. Prototype based Object oriented
+
+6. First-class functions
+
+7. Dynamically typed
+
+8. Singled threaded
+
+9. Non-blocking event loop
+
+
+Javascript Engine and Runtime:
+------------------------------
+
+Javascript engine is a program that executes javascript code - Each engine has two components call stack(where our code is executed) and heap(unstructured memory pool that stores objects that application needs).
+
+Compilation - entire code converted into machine code in a portable file and can be executed by the computer processor.
+
+Interpretation - the code is read and executed all at the same time, the interpreter runs through the code and executes it line by line
+
+Modern javascript is no interpreter language it used JIT(Just in time) compilation. There is no portable file, but the converted machine code is executed immediately 
+
+Modern JS Engine - Execution steps
+-----------------------------------
+
+1. Parsing - Parse the code into AST(Abstract syntax tree) - read and stored as meaningful chunks in a structured way - this step also checks whether they are any syntax error and resulting tree is used to generate the machine code.
+
+2. Compilation and Execution - Takes the generated AST and compiles into the machine code and this machine code is executed right way in Java script engine's call stack.
+
+3.Optimization - while executing the unoptimized version of machine code(so that they can start executing as fast as possible), then in the background this machine code is optimized and recompiled during already running program execution - and old code is swapped with optimized code for execution.
+
+Javascript Runtime -
+-------------------
+
+1. Container that includes all the things we need to use javascript
+
+2. Js Runtime in the browser is comprised of Javascript engine, WEB APIs(DOM, Timers, Fetch API) - which are functionalities provided to the engine, accessible on window object but not part of javascript itself
+
+3. Also includes callback queue - which is a datastructure which contains all the callback functions that are ready to be executed. When 'click' happens the attached event handler function is put in the callback queue and when call stack is empty it is passed to the stack for execution - powered by event loop mechanism(essential for non-blocking concurrency model).
+
+Execution context and Call stack:
+---------------------------------
+
+1. Creation of global execution context which the default context for code that is not inside any function
+
+2. The top-level code (the code no inside the function) will be executed in the global execution context(environment that stores all necessary info for execution)
+
+3. Execution of functions and callbacks - For each function/method call, a separte execution context is created. After executing the functions the engine will keep waiting for the call back functions to arrive, eventloop provides these call back functions when an event occurs.
+
+What is actually inside Execution context:
+------------------------------------------
+1. Variable environment - 
+    let,const and var declarations (all variable values are known only while execution, so varibles are initially assigned with unknown value)
+    function declarations 
+    arguments object - that contains function arguments
+
+2. scope chain - contains references to the variable that are located outside of the current function - stored in each execution context
+
+3. each context also has "this" keyword
+
+All of the above are generated during the creation phase of execution context. 
+
+NOTE: Arrow functions will not have their own arugments object and this keyword - but uses the "argument" object and "this" keyword from the closest regular function parent. 
+
+Like this 100s of execution context will be created and for the engine to keep track of the order in which functions were called and the current point in execution, call stack is used.
+
+Call Stack:
+-----------
+1. Execution context gets stacked on top of each other - and the one at the top will be currently be executed
+
+2. It has one thread for execution and can only execute one function at a time, when the function finishes its execution, the execution context will be popped off the stack and resume the execution of the prev function whose execution context is now at the top of the call stack. Order of execution is kept track of by the call stack.
+
+3. Only when the browser is closed, the program gets terminated by popping off the global execution context from the stack.
+
+Scoping and scope in javascript:
+-------------------------------
+Scoping - How the program's variables are organized and accessed
+
+Lexical scoping - scoping controlled by placement of functions and blocks in the code
+
+Scope - environment in which the varible is declared. There are global scope(variables declared outside of any function or block - global variables - accessible everywhere within our code), function scope(contains varibles declared in that specific function and are accessible inside that function only, also called local scope) and block scope( From ES6, blocks also creates scope - everything within the curly braces like if and for block - varibles declared inside block cant be accessed outside, applies to only let and const, var is function scoped or globally scoped, functions declared within the block are accessible only within that block - only while using strict mode). So let,const and functions are block scoped.
+
+Scope chain - In this chain every inner scope has access to variables from all its outer scopes/parent scopes. This process is called varibale lookup in scope chain. These variables will not be copied from one scope to another instead they simply lookup in the scope chain until they find the varible and then they use it. But the parent scope doesnt have access to its inner scopes.
+
+NOTE: var is closest function scoped and let and const are block-scoped.By the rules of lexical scoping, Sibling scopes wont have access to each other variables.
+
+Scope chain and call stack:
+--------------------------
+
+Scope chain has nothing to do with the order of execution context or nothing to do with order in which the functions were called in call stack.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

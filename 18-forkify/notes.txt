@@ -1,0 +1,73 @@
+Lecture:
+
+Run "npm init" command to initialize new project which will create the package.json file and call the project as "forkify"
+in package.json file set up npm scripts "start"(run the parcel command by providing the entry point - it can either be html or JS file) and "build script" under scripts tag.
+Install parcel as a Dev dependency (npm i parcel@next --save-dev)
+Now start parcel by running the npm "start script" - "npm run start" command/start script is a special one in npm so we can even run by "npm start"
+If ran into some kind of error for missing installations then simply run the command "npm install" or "npm i sass@1.26.10(or any version number)"
+polyfill the ES 6 features to work with old browsers - so install some packages- "npm i core-js regenerator-runtime" --> installs multiple packages at the same time and import them into controller.js
+
+Missing content key error - execute "rmdir ./parcel-cache", and run "npm install" and start the parcel again 
+
+MVC Architecture
+Why worry about architecture
+It gives structure to our code - organize (into classes and fns and modules) and helps to divide and maintain our code(changes in future can be made easy) and expandability ( to add new features to the product)
+Perfect architecture must be a combination of all the above 3 criterias
+Well established architectures - MVC, MVP(Modal view presenter) and Flux
+We can also use react, angular or vue to take care of the architecture
+
+Main components of any architecture - 
+1. Business Logic - solves actual business problem
+2. State - most important aspect of any web application - application state stores all data about the application running in the browser - the data about the application's frontend - this should include the data that is fetched from the api, the page that currently user views and the input that the user enters - so if some data is changed in state it has to be reflected in UI also - single source of truth - and some change in UI should also reflect in the state- keeping everything in sync while building a web application is a challenging task
+3. HTTP library - for making and receiving the ajax requests from web servers - because real world applications needs some interaction with the web
+4. Application Logic(Router - mapping actions to user navigation) - More technical aspects of the application that is not directly linked to the underlying business problem - Navigation on page and handling of UI events 
+5. Presentation Logic (UI Layer) - is responsible for the visible part of the application - displays the application state
+
+Any good architecture has all these components well separated and organized 
+
+MVC (Model View Controller)
+View - Presentation Logic - part of application interacting with the user
+Model - is about the application data - contains the state and the business logic that manipulates the state - contains http library that gets data from the web api 
+Controller - contains the application logic - Should create a bridge between model and view - handles UI events and dispatches tasks to model and view - controls and orchestrates - Actual fn calls are only made from controller to model and views and never other way around
+
+Model and view exists completely independent from one another - refer to detailed implementation of forkify MVC architecture
+
+npm has one page documentation for many packages - eg fractional - https://www.npmjs.com/package/fractional - npm install fractional
+
+Event Hanlders in MVC - Publisher and Subscriber Pattern - Listen and handle events 
+We want to handle events in the controller - since it is application logic
+Events should be listened for in the view or else we might need DOM elements in the controller
+View doesnt import the controller so we cant call its method - so we need to use publisher subscriber pattern - we have a publisher (code which knows when to react - addEventHandler method) - and a subscriber (code that wants to react) - and publisher doesnt know even that the subscriber exists - but we can subscribe to publisher by passing in the subscriber function - As soon as the publisher publishes an event the subscriber controller fn is called - this is how we implement event listeners in MVC pattern - thus the event handler subscribes to the publisher(event listener) 
+
+There is a difference between function A() directly calling function B and function A receiving a fn and calling that fn when an event occurs (fn A doesnt have much control over the called fn , it simply executes whatever is passed) 
+
+Lecture: MVC - refer notes
+
+Lecture: Refactoring for MVC create necessary modules one for model and one for controller and many views (since they can grow bigger)
+
+Lecture: Helper and configuration files 
+Module for helper functions and module for configs used across the project 
+
+Lecture: Implementing event listeners in MVC refer notes
+
+Lecture: Implementing error and success messages - Handling an error basically means displaying error messages in the view to intimate the users with the problem occurred
+
+Lecture: Implementing search results - Part 1 (Load search result)
+
+Lecture:Implementing search results - Part 2 (render search result)
+
+Lecture: Implementing Pagination - Part 1 
+
+Lecture: Implementing Pagination - Part 2
+Scenarios to handle
+first page - only next button
+last page - only back button 
+if results is less than 10 - no button should be present
+if in middle page then both next and back buttons must be visible
+
+Lecture- Update Recipe Servings
+Lecture- Developing a DOM updating algorithm
+
+Lecture - Implementing bookmarks and making it persist across page reloads
+
+Lecture - Uploading a new Recipe to the API - user owned recipes are automatically bookmarked and uploaded 
