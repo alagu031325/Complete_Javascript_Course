@@ -19,11 +19,42 @@ Contents:
 13) Asynchronous JS
 14) Forkify Application
 
-Developed 5 projects throughout the learning journey, out of which 3 are hosted on Netlify
+Developed 5 projects throughout the learning journey, out of which 2 are hosted on Netlify
 
-https://alagu-forkify.netlify.app/ - This is an online recipe web application - where we can search from list of recipies taken from the api 'https://forkify-api.herokuapp.com/api/v2/recipes/' - and we can also add new recipes, bookmark our favorite recipes and increase/decrease the servinds to update the ingredients
+https://alagu-pig-game.netlify.app/ - Gameplay:
 
-https://alagu-pig-game.netlify.app/ - Two player game, the first player can keep rolling the dice and adds up the point if one rolls on the dice then the chance will shift to the second player, if we like to add our points to the final score we need to hold the points, holding it soon will change the chance to the second player or holder it too late will lead to lose the points if the dice is rolled to one, the players who holds 50 points at the end will be the winner 
+Starting the Game:
+
+Decide who goes first by any mutual agreement or coin toss.
+
+Player's Turn:
+On a player's turn, they roll a single die.
+The player can continue rolling the die as many times as they like during their turn.
+Rolling the Die:
+
+If the die rolls any number other than 1, the player adds the rolled number to their turn's score.
+The player then decides whether to:
+Roll again: Continue rolling the die to accumulate more points for the turn.
+Hold: Add the points accumulated during the turn to their total score and end their turn.
+
+Rolling a 1:
+If the die rolls a 1, the player's turn ends immediately.
+They lose all points accumulated during that turn, and no points are added to their total score.
+The turn then passes to the other player.
+
+Holding:
+When a player chooses to hold, their turn's accumulated points are added to their total score.
+The turn then passes to the other player.
+
+Winning the Game:
+The game continues with players alternating turns until one player's total score reaches or exceeds 50 points.
+The first player to reach or exceed 50 points wins the game.
+
+Strategy:
+Players must decide how many times to roll the die each turn. Rolling more can yield higher points but comes with the risk of rolling a 1 and losing the turn's points.
+Holding at the right moment can prevent losing points to a roll of 1, but might also mean missing out on potentially higher scores.
+
+Enjoy playing Pig!
 
 https://alagu-mapty.netlify.app/ - While using this mapty application kindly allow the location access to set the map in the current location - then we can click anywhere on the map to add our running or cycling minutes and to keep track of our physical activities
 
