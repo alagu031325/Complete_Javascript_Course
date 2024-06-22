@@ -68,14 +68,14 @@ console.log('Bankist App');
 //Lecture 5 - Overview of flow chart
 
 //Lecture 6 - Creating DOM Elements
-//Good practice to pass the data into a fn instead of working with a global variable 
+//Good practice to pass the data into a fn instead of working with a global variable
 //Also support sorting feature of movements array with optional parameter sort
 const displayMovements = function (movements, sort = false) {
   //Empty the container and start adding new elements
   containerMovements.innerHTML = ''; //textContent returns only the text but html returns text including the html elements
 
-  //create a copy of movements array using slice method and then sort the array so not to mutate the underlying order of the array 
-  const movs = sort ? movements.slice().sort((a,b)=> a-b):movements;
+  //create a copy of movements array using slice method and then sort the array so not to mutate the underlying order of the array
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
 
   // console.log("movs and sort varible",sort, movs);
   movs.forEach(function (mov, index) {
@@ -97,12 +97,12 @@ const displayMovements = function (movements, sort = false) {
 
 //state variable to monitor whether we are currently sorting the array or not
 let sorted = false;
-btnSort.addEventListener('click',function(e){
+btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements,!sorted);
+  displayMovements(currentAccount.movements, !sorted);
   //flip the variable
   sorted = !sorted;
-})
+});
 
 //Lecture 7 - Data transformations using Map, filter and reduce(array methods) - create new arrays based on transforming data from other arrays
 
@@ -263,7 +263,7 @@ const calcDisplaySummary = function (acc) {
   const interest = acc.movements
     .filter(mov => mov > 0)
     //interest calculated for each element and added up together
-    .map(deposit => (deposit * acc.interestRate)/100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     //to exclude interest that are atleast 1
     .filter(interest => interest >= 1)
     .reduce((acc, interest) => acc + interest, 0);
@@ -276,7 +276,7 @@ const calcDisplaySummary = function (acc) {
 
 //Lecture 11 : The Find Method
 //Find loops over the array and accepts a call back fn -> Like filter method find also needs a callback fn that returns boolean - but find doesnt return a new array but only returns the first element in the array that satisfies the condition
-const firstWithdrawal = movements.find(mov => mov<0);//returns first element for which call back fn returns true, it doesnt return an array
+const firstWithdrawal = movements.find(mov => mov < 0); //returns first element for which call back fn returns true, it doesnt return an array
 console.log(firstWithdrawal);
 
 //Using find method we can find retrieve an object in an array based on some property of that object
@@ -285,87 +285,96 @@ console.log(accountJessica); //this really helpful where an array contains multi
 
 //Goal of find method is to exactly find one element from an array
 let accountJonas;
-for(const acc of accounts){
-  if(acc.owner === 'Jonas Schmedtmann')
-    accountJonas = acc;
+for (const acc of accounts) {
+  if (acc.owner === 'Jonas Schmedtmann') accountJonas = acc;
 }
 console.log(accountJonas);
 
 //Lecture 12 : Implementing Login Functionality in banker app
 //Attach event handler to login btn
-const updateUI = function(acc){
-//Display movements
-displayMovements(acc.movements);
+const updateUI = function (acc) {
+  //Display movements
+  displayMovements(acc.movements);
 
-//Display balance
-calcDisplayBalance(acc);
+  //Display balance
+  calcDisplayBalance(acc);
 
-//Display summary
-calcDisplaySummary(acc);
-}
+  //Display summary
+  calcDisplaySummary(acc);
+};
 
 //variable points to the original object in the memory heap
 let currentAccount;
-btnLogin.addEventListener('click',function(e){
+btnLogin.addEventListener('click', function (e) {
   //Prevent form from submitting/refreshing when clicking - In forms clicking enter in any of the fields will trigger click event on the submit btn
   e.preventDefault();
   //to retrieve value out of an input field use value property
-  currentAccount = accounts.find(acc=>acc.username === inputLoginUsername.value); //undefined returned if username is not in the list of arrays - so we need to use optional chaining
-  console.log("current account found",currentAccount);
-  if(currentAccount?.pin === Number(inputLoginPin.value)){//value from input field is always string
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  ); //undefined returned if username is not in the list of arrays - so we need to use optional chaining
+  console.log('current account found', currentAccount);
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    //value from input field is always string
     //Display UI and welcome message
-    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;//retrieve the first name alone
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`; //retrieve the first name alone
     containerApp.style.opacity = 100;
 
     //clear input fields
     inputLoginUsername.value = inputLoginPin.value = ''; //assignment operator works from right to left, so first empty string assigned to inputLoginPin and then assigned to username
 
-    //To lose focus on input pin field 
+    //To lose focus on input pin field
     inputLoginPin.blur(); //This blur makes the input field loses its focus
 
     updateUI(currentAccount);
   }
-})
+});
 
 //Lecture 12 : Transferring money from one user to another
-btnTransfer.addEventListener('click',function(e){
+btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Number(inputTransferAmount.value);
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
-  );//returns the object for which the condition evaluates to true
-  console.log(amount,receiverAcc);
+  ); //returns the object for which the condition evaluates to true
+  console.log(amount, receiverAcc);
 
   //Clear input fields
   inputTransferAmount.value = inputTransferTo.value = '';
   inputTransferAmount.blur();
 
   //To avoid negative transfers - if receiverAcc doesnt exists due to optional chaining "?." it returns undefined and entire && operation will fail, proceeds only if receiverAcc exists and compares if it is different from the current acc
-  if(amount > 0 && receiverAcc && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount.username){
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
     //Doing Transfer
-    currentAccount.movements.push(-amount);//pushing withdrawal neg number
-    receiverAcc.movements.push(amount);//pushing deposit into receiverAcc
+    currentAccount.movements.push(-amount); //pushing withdrawal neg number
+    receiverAcc.movements.push(amount); //pushing deposit into receiverAcc
 
     //Update UI
     updateUI(currentAccount);
-
   }
-
 });
 
 //Lecture 13 : FindIndex Method - returns the index of the found element and not the element itself - use case is to close the account and delete the accounts object from the array
-btnClose.addEventListener('click',function(e){
+btnClose.addEventListener('click', function (e) {
   e.preventDefault();
 
-  if( currentAccount.username === inputCloseUsername.value && currentAccount.pin === Number(inputClosePin.value)){
-
-    //ES 6 method has access to 3 arguments element, index and entire array 
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    //ES 6 method has access to 3 arguments element, index and entire array
     const index = accounts.findIndex(acc => {
-      return acc.username === currentAccount.username //returns the index of the first element in the array that matches this condition 
+      return acc.username === currentAccount.username; //returns the index of the first element in the array that matches this condition
     });
     console.log(index);
     //deletes one element starting from the index - mutates the underlying array - delete account
-    accounts.splice(index,1);
+    accounts.splice(index, 1);
     //Hide UI
     containerApp.style.opacity = 0;
   }
@@ -373,29 +382,31 @@ btnClose.addEventListener('click',function(e){
   //Clear input fields
   inputCloseUsername.value = inputClosePin.value = '';
   inputTransferAmount.blur();
-
-})
+});
 
 //Lecture 14 : some and every array method
 //includes method on array - true if an array includes a certain value
-console.log("movements array - includes mthod",movements.includes(-130));
+console.log('movements array - includes mthod', movements.includes(-130));
 //But we can only test only equality
 
 //But if we want to test for a condition then we should use some method
 //To know if there are any positive movements in this array - any deposits > 0
 const hugeDeposits = movements.some(mov => mov > 5000);
-console.log("Checking for huge deposits in movements: ", hugeDeposits);
+console.log('Checking for huge deposits in movements: ', hugeDeposits);
 
 //rewriting the equality comparison with some method
-console.log("equality comparison with some:",movements.some(mov=>mov === -130));
+console.log(
+  'equality comparison with some:',
+  movements.some(mov => mov === -130)
+);
 //For any value if this condition evaluates to true then some mthd returns true or else false
 
 //Loan feature - use case
 //loan granted only if there is atleast 1 deposit that is greater than or equal to 10% of the requested loan amount
-btnLoan.addEventListener('click',function(e){
+btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Number(inputLoanAmount.value);
-  if(amount > 0 && currentAccount.movements.some(mov => mov >= amount*0.1)){
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     //Add loan amount as positive movement
     currentAccount.movements.push(amount);
 
@@ -406,47 +417,55 @@ btnLoan.addEventListener('click',function(e){
 });
 
 //separate call back and reuse it - DRY
-const deposit = mov => mov >0;
+const deposit = mov => mov > 0;
 
 //every - array method - returns true only if all the elements in the array pass the condition in the call back fn
-console.log("every method",movements.every(deposit));//checking if all of the movements are positive/deposits
+console.log('every method', movements.every(deposit)); //checking if all of the movements are positive/deposits
 
 //account4 has only deposits for which every method condition pass for all elements
-console.log("every mthod - only deposits",account4.movements.every(deposit));
+console.log('every mthod - only deposits', account4.movements.every(deposit));
 
 //Lecture 15 : Flat and FlatMap array method - ES 2019
-const sampleArr = [[1,2,3],[8,9,10],12,13];
-console.log("Flatened array by removing nested arrays",sampleArr.flat()); //destructed the arrays within the main array - works with one level deep 
+const sampleArr = [[1, 2, 3], [8, 9, 10], 12, 13];
+console.log('Flatened array by removing nested arrays', sampleArr.flat()); //destructed the arrays within the main array - works with one level deep
 
 //With deep nested arrays
-const sampleNestedDeep = [[1,[2,3,4]],[8,9,[10,11]],12,13];
-console.log("Flatened deep nested array",sampleNestedDeep.flat());//flat mthod goes only 1 level deep and destructures it - default depth is 1
+const sampleNestedDeep = [[1, [2, 3, 4]], [8, 9, [10, 11]], 12, 13];
+console.log('Flatened deep nested array', sampleNestedDeep.flat()); //flat mthod goes only 1 level deep and destructures it - default depth is 1
 
-//We can go 2 levels deep and destructure it by specifying the depth argument 
-console.log("Flatened deep nested array",sampleNestedDeep.flat(2));
+//We can go 2 levels deep and destructure it by specifying the depth argument
+console.log('Flatened deep nested array', sampleNestedDeep.flat(2));
 
 //Usecase - Bank wants to calculate the overall balance of all the movements of all the accounts
 const accountMovements = accounts.map(acc => acc.movements); //returns new array that contains the movements array from each account
-const allMovements = accountMovements.flat();//one level of nesting only needed
-console.log("All movements reduced", allMovements.reduce((acc,mov)=>acc+mov, 0));
+const allMovements = accountMovements.flat(); //one level of nesting only needed
+console.log(
+  'All movements reduced',
+  allMovements.reduce((acc, mov) => acc + mov, 0)
+);
 
 //Chaining - Flat method
-const overallBalance = accounts.map(acc => acc.movements).flat().reduce((acc,mov)=>acc+mov, 0);
-console.log("overallBalance with chaining mthds", overallBalance);
+const overallBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log('overallBalance with chaining mthds', overallBalance);
 
 //Usually map and flat methods are used together - so flatMap was introduced to combine the operations of both Map and flat methods - receives call back and flatens the result array
-const overallBalance2 = accounts.flatMap(acc => acc.movements).reduce((acc,mov)=>acc+mov, 0);
-console.log("overallBalance with flatMap mthds", overallBalance2);
+const overallBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log('overallBalance with flatMap mthds', overallBalance2);
 //flatMap can only go one level deep and we cant change the depth of destructuring
 
 //Lecture 16 : Sorting Arrays
 //Strings
-const owners = ['Nanny Plum','Red Bread','Wise Olf Elf','Princess Holly'];
-//Sort method mutates the original array - changes the order in the owners array 
-console.log("Sorted array", owners.sort());
+const owners = ['Nanny Plum', 'Red Bread', 'Wise Olf Elf', 'Princess Holly'];
+//Sort method mutates the original array - changes the order in the owners array
+console.log('Sorted array', owners.sort());
 
 //Numbers
-console.log(movements.sort());//Doesn't order it correctly, because sort mthd does sorting based on strings(by default converts everthing to string and does sorting - so displays as 1,2, 3,4,5,... but can be fixed by sending a call back function to sort mthd)
+console.log(movements.sort()); //Doesn't order it correctly, because sort mthd does sorting based on strings(by default converts everthing to string and does sorting - so displays as 1,2, 3,4,5,... but can be fixed by sending a call back function to sort mthd)
 
 //sort method looping over the array and takes 2 arguments current value and the next value
 // movements.sort((a,b)=>{
@@ -459,9 +478,9 @@ console.log(movements.sort());//Doesn't order it correctly, because sort mthd do
 //     return -1;
 //   }
 // })
-movements.sort((a,b)=> a - b); //if 0 returned the position remains unchanged
+movements.sort((a, b) => a - b); //if 0 returned the position remains unchanged
 // To sort in ascending order
-console.log("Ascending order",movements); //mutates original array
+console.log('Ascending order', movements); //mutates original array
 
 //Descending order
 // movements.sort((a,b)=>{
@@ -474,38 +493,41 @@ console.log("Ascending order",movements); //mutates original array
 //     return 1;
 //   }
 // })
-movements.sort((a,b)=> b - a);
-console.log("Descending order", movements);
+movements.sort((a, b) => b - a);
+console.log('Descending order', movements);
 
 //Lecture 17 - Programmatically create and fill arrays
-//If we have the data that we want to be in the array then we can manually create the array uisng [] construct 
-const arr = [1,2,3,4,5,6,7]
-console.log("manual array creation",arr);
-//create array without having to define all the elements manually 
-console.log("using new array method", new Array(5)); //creates new array with 5 empty elements in there, 
-const emptyArray = new Array(7);//map mthod cant work on empty array
+//If we have the data that we want to be in the array then we can manually create the array uisng [] construct
+const arr = [1, 2, 3, 4, 5, 6, 7];
+console.log('manual array creation', arr);
+//create array without having to define all the elements manually
+console.log('using new array method', new Array(5)); //creates new array with 5 empty elements in there,
+const emptyArray = new Array(7); //map mthod cant work on empty array
 //emptyArray.fill(3); //fill up empty array with the supplied value
 //can also specify 2nd argument as the begin parameter
-emptyArray.fill(3,3,5);//only starting from 3rd position uptill (5th position-1) fills the "3" value
+emptyArray.fill(3, 3, 5); //only starting from 3rd position uptill (5th position-1) fills the "3" value
 console.log(emptyArray);
 
-arr.fill(23, 4,6)//mutates the original array 
+arr.fill(23, 4, 6); //mutates the original array
 console.log(arr);
 
 //To recreate "arr" array programatically - Array.from function - using it on a Array constructor
-const arrFunc1 = Array.from({length:7},() => 1); //to return 1 in each iteration and create array of length 7 , no arguments
+const arrFunc1 = Array.from({ length: 7 }, () => 1); //to return 1 in each iteration and create array of length 7 , no arguments
 console.log(arrFunc1);
 
-const arrFunc2 = Array.from({length:7},(_,i) => i+1); //callback fn can get access to current element and current index - similar to calling map method on an empty array - can also use a "throw away" variable since it is not needed, but still the first parameter has to be defined
+const arrFunc2 = Array.from({ length: 7 }, (_, i) => i + 1); //callback fn can get access to current element and current index - similar to calling map method on an empty array - can also use a "throw away" variable since it is not needed, but still the first parameter has to be defined
 console.log(arrFunc2);
 
 //from function - Introduced into JS to create array from array like structures - like strings maps or sets - create arrays from (iterables)
 //convert nodeList into an array to take advantage of all array methods
-//Get the movements from UI and refractor by removing currency sign 
-labelBalance.addEventListener('click',function(){
-  const movementsUI = Array.from(document.querySelectorAll('.movements__value'), dom=> Number(dom.textContent.replace('💶',''))); //creates an array with elements from first argument and fills it with second call back function parameter which transforms the initial array
+//Get the movements from UI and refractor by removing currency sign
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    dom => Number(dom.textContent.replace('💶', ''))
+  ); //creates an array with elements from first argument and fills it with second call back function parameter which transforms the initial array
   // console.log(movementsUI.map(dom=> Number(dom.textContent.replace('💶',''))));
-  console.log("Programatically creating arrays",movementsUI);
+  console.log('Programatically creating arrays', movementsUI);
 
   //can also create an array with spread operator
   // [...document.querySelectorAll('.movements__value')]
@@ -516,58 +538,65 @@ labelBalance.addEventListener('click',function(){
 
 //Lecture 19 - Array Methods Practice
 //1. flatMap
-const depositsTotal = accounts.flatMap(acc=>acc.movements).filter(mov => mov>0).reduce((acc,mov)=> acc+mov,0);
-console.log("Total deposits sum",depositsTotal);
+const depositsTotal = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 0)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log('Total deposits sum', depositsTotal);
 
 //2. How many deposits with atleast 1000$
 // const numDeposits1000 = accounts.flatMap(acc=>acc.movements).filter(mov=> mov >= 1000).length;
 // console.log("deposits with atleast 1000$",numDeposits1000);
 
-const numDeposits1000 = accounts.flatMap(acc=>acc.movements).reduce((acc,mov)=>mov>=1000?++acc:acc,0) //update initial value based on the condition in the call back fn - accumulator reduced to a counter which stores number of values >= 1000$
+const numDeposits1000 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => (mov >= 1000 ? ++acc : acc), 0); //update initial value based on the condition in the call back fn - accumulator reduced to a counter which stores number of values >= 1000$
 console.log(numDeposits1000);
 
 // Postfixed and Prefixed ++ Operator
 let incrementOp = 10;
-console.log(incrementOp++);//still returns the older value and then increments it so cant use it in reduce fn which will return only 0 if we use acc++ - but we can use prefixed ++ Operator
+console.log(incrementOp++); //still returns the older value and then increments it so cant use it in reduce fn which will return only 0 if we use acc++ - but we can use prefixed ++ Operator
 console.log(incrementOp); //incremented
 
 //3. Create new object from reduce method
-const sums = accounts.flatMap(acc=>acc.movements).reduce((sums,curr)=>{
-  curr > 0?sums.deposits+=curr:sums.withdrawals+=curr;//should return the accumulator object
-  return sums},{deposits:0, withdrawals:0}); // can also directly destructure object
+const sums = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, curr) => {
+      curr > 0 ? (sums.deposits += curr) : (sums.withdrawals += curr); //should return the accumulator object
+      return sums;
+    },
+    { deposits: 0, withdrawals: 0 }
+  ); // can also directly destructure object
 
 console.log(sums);
 
 //Object value as accumulator
-const {depositsSum, withdrawalsSum} = accounts.flatMap(acc=>acc.movements).reduce((sums,curr)=>{
-  sums[curr>0?'depositsSum':'withdrawalsSum'] += curr;
-  //should return the accumulator object
-  return sums},{depositsSum:0, withdrawalsSum:0}); //same name for destructuring
-console.log(depositsSum,withdrawalsSum);
+const { depositsSum, withdrawalsSum } = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, curr) => {
+      sums[curr > 0 ? 'depositsSum' : 'withdrawalsSum'] += curr;
+      //should return the accumulator object
+      return sums;
+    },
+    { depositsSum: 0, withdrawalsSum: 0 }
+  ); //same name for destructuring
+console.log(depositsSum, withdrawalsSum);
 
 //4. Convert string to title case - string and array mthds
 //this is a nice title => This Is a Nice Title => a is an exception
-const convertTitleCase = function(title){
+const convertTitleCase = function (title) {
   const capitzalize = str => str[0].toUpperCase() + str.slice(1);
-  const exceptions = ['a','an','the','and','but','on','in','with'];
-  const titleCase = title.toLowerCase().split(' ').map(word => exceptions.includes(word)? word: capitzalize(word)).join(' ');
+  const exceptions = ['a', 'an', 'the', 'and', 'but', 'on', 'in', 'with'];
+  const titleCase = title
+    .toLowerCase()
+    .split(' ')
+    .map(word => (exceptions.includes(word) ? word : capitzalize(word)))
+    .join(' ');
   //But is and is at the beginning it should be capitalized
   return capitzalize(titleCase);
-}
+};
 console.log(convertTitleCase('this is a nice title'));
 console.log(convertTitleCase('this is a LONG title but not too long'));
 console.log(convertTitleCase('and here is another title with an EXAMPLE'));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
